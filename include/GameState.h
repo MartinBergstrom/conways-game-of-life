@@ -8,7 +8,7 @@ class GameState
         GameState();
         GameState(Grid &grid);
         void updateGameState();
-        int findNeighboursOnRow(int** gridMatrix, int yIndex, int xIndex, bool excludeMiddle);
+        int findNeighboursOnRow(GridArr gridMatrix, int yIndex, int xIndex, bool includeMiddle);
 
     private:
         Grid &grid;

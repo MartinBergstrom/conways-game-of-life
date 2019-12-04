@@ -5,6 +5,11 @@
 
 using namespace std;
 
+const int GRID_WIDTH = 30;
+const int GRID_HEIGHT = 20;
+
+using GridArr = array<array<int, GRID_WIDTH>, GRID_HEIGHT>;
+
 
 class Grid
 {
@@ -14,12 +19,12 @@ class Grid
         void loadGrid(string fileName);
         void updateCoordinate(int x, int y);
         void printGrid();
-        int** getGrid();
+        GridArr& getArr();
 
     private:
         void loadLineIntoGridArr(int index, string line);
 
-        int** grid;
+        GridArr myGrid;
         string testString;
 };
 

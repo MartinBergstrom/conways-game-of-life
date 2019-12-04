@@ -5,25 +5,11 @@
 
 using namespace std;
 
-
-const int GRID_WIDTH = 30;
-const int GRID_HEIGHT = 20;
-
 Grid::Grid()
-{
-    grid = new int*[GRID_HEIGHT];
-    for(int i = 0; i < GRID_HEIGHT; ++i)
-    {
-        grid[i] = new int[GRID_WIDTH];
-    }
-}
+{}
 
 Grid::~Grid()
 {
-    for(int i = 0; i < GRID_WIDTH; ++i) {
-        delete [] grid[i];
-    }
-    delete [] grid;
 }
 
 void Grid::loadGrid(string fileName)
@@ -68,7 +54,7 @@ void Grid::loadLineIntoGridArr(int index, string line)
     }
     for (int x = 0; x<GRID_WIDTH; x++)
     {
-        grid[index][x] = (int)formattedStr.at(x) - 48; // because ASCII numbers start at 48
+        myGrid[index][x] = (int)formattedStr.at(x) - 48; // because ASCII numbers start at 48
     }
 }
 
@@ -83,15 +69,24 @@ void Grid::printGrid()
     {
         for(int x=0; x<GRID_WIDTH; x++)
         {
-           cout << grid[y][x];
+            string formattedStr;
+            if (myGrid[y][x] == 0)
+            {
+                formattedStr = "|| ";
+            } else
+            {
+                formattedStr = "XX ";
+            }
+            cout << formattedStr;
         }
         cout<<endl;
     }
 }
 
-int** Grid::getGrid()
+GridArr& Grid::getArr()
 {
-    return grid;
+    return myGrid;
 }
+
 
 

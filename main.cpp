@@ -16,6 +16,8 @@ int main()
     g.printGrid();
     GameState state(g);
     state.updateGameState();
+
+    cout << "-------------" << endl;
     g.printGrid();
 
     while(true) {
@@ -28,5 +30,5 @@ void runGameLoop(Grid &g, GameState &gState)
 {
     g.printGrid();
     gState.updateGameState();
-    Sleep(800);
+    Sleep(1000);
 }

@@ -1,8 +1,7 @@
 #include "GameState.h"
 
+using GridArr = array<array<int, GRID_WIDTH>, GRID_HEIGHT>;
 
-const int GRID_WIDTH = 30;
-const int GRID_HEIGHT = 20;
 
 GameState::GameState(Grid &inputGrid): grid(inputGrid)
 {
@@ -10,22 +9,10 @@ GameState::GameState(Grid &inputGrid): grid(inputGrid)
 
 void GameState::updateGameState()
 {
-    std::cout << "updateGameState" <<std::endl;
-    int** gridMatrix = grid.getGrid();
+    GridArr& gridMatrix = grid.getArr();
 
     // create new Grid
-    int ** newGrid = new int*[GRID_HEIGHT];
-    for(int i = 0; i < GRID_HEIGHT; ++i)
-    {
-        newGrid[i] = new int[GRID_WIDTH];
-    }
-    for(int y=0; y<GRID_HEIGHT; y++)
-    {
-        for(int x=0; x<GRID_WIDTH; x++)
-        {
-           newGrid[y][x] = gridMatrix[y][x];
-        }
-    }
+    GridArr newGrid = gridMatrix;
 
     for(int y=0; y<GRID_HEIGHT; y++)
      {
@@ -34,18 +21,24 @@ void GameState::updateGameState()
             int aliveNeighBours = 0;
             // check above
             if (y > 0)
-                aliveNeighBours += findNeighboursOnRow(gridMatrix, y - 1, x, false);
+                aliveNeighBours += findNeighboursOnRow(gridMatrix, y - 1, x, true);
             // check same row
-            aliveNeighBours += findNeighboursOnRow(gridMatrix, y, x, true);
+            aliveNeighBours += findNeighboursOnRow(gridMatrix, y, x, false);
             // check below
-            if (y < (GRID_HEIGHT - 1))
-                aliveNeighBours += findNeighboursOnRow(gridMatrix, y + 1, x, false);
+            if (y < (GRID_HEIGHT - 1)) {
+                int neighboursBelow = findNeighboursOnRow(gridMatrix, y + 1, x, true);
+                aliveNeighBours += neighboursBelow;
+            }
 
+            if (aliveNeighBours == 4 && gridMatrix[y][x] == 1) {
+                   cout << "4 neighbours: " << endl;
+            }
             if (aliveNeighBours < 2 || aliveNeighBours > 3)
                 newGrid[y][x] = 0;
-
-            if (aliveNeighBours == 3)
+            else if (aliveNeighBours == 3)
                 newGrid[y][x] = 1;
+            else
+                newGrid[y][x] = gridMatrix[y][x];
         }
     }
 
@@ -58,11 +51,13 @@ void GameState::updateGameState()
     }
 }
 
-int GameState::findNeighboursOnRow(int** gridMatrix, int yIndex, int xIndex, bool excludeMiddle)
+int GameState::findNeighboursOnRow(GridArr gridMatrix, int yIndex, int xIndex, bool includeMiddle)
 {
     int count = 0;
-    if (!excludeMiddle && gridMatrix[yIndex][xIndex] == 1)
+    if (includeMiddle == true && gridMatrix[yIndex][xIndex] == 1)
+    {
         count++;
+    }
 
     if (xIndex > 0)
     {
